@@ -156,3 +156,7 @@ exports.updateLocaleFile = async () => {
     resolve();
   });
 }
+
+exports.jsonResponseObject = async (res, payload, error = undefined) => {
+  return res.json({payload, error})
+}

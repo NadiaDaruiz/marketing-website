@@ -1813,3 +1813,11 @@ body[class*="pages-"] {
 .hidden {
   display: none;
 }
+#questionsdiagramroot {
+  height: 100%;
+	padding: 0;
+	margin: 0;
+  > div > div > div {
+    overflow: initial;
+  }
+}
