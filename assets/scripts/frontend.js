@@ -5,7 +5,7 @@ import "bootstrap/js/dist/dropdown";
 import "bootstrap/js/dist/collapse";
 import "bootstrap/js/dist/carousel";
 import "bootstrap/js/dist/alert";
-import {alertTimeout} from "./helper.js"
+import { alertTimeout } from "./helper.js"
 require("./polygons");
 require("../css/style.scss");
 
@@ -30,7 +30,7 @@ const toggleNL = (remove = false) => {
           headers: {
             "content-type": "application/json"
           },
-          body: JSON.stringify({email}) // data can be `string` or {object}!
+          body: JSON.stringify({ email }) // data can be `string` or {object}!
         })
           .then(res => res.json())
           .then(response => {
@@ -206,7 +206,7 @@ function objectToCsv(data) {
 }
 
 function downloadCsv(data) {
-  const blob = new Blob([data], {type: "text/csv"});
+  const blob = new Blob([data], { type: "text/csv" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.setAttribute("id", "csv");
@@ -223,11 +223,11 @@ $("#downloadCSV").on("click", function (e) {
     .then(resp => resp.json())
     .then(data => {
       let leads = data
-      .map(lead => ({
-        ...lead,
-        utm_params: lead.utm_params ? JSON.stringify(lead.utm_params) : "",
-        locations: lead.locations && lead.locations[0] ? lead.locations[0].name : ""
-      }));
+        .map(lead => ({
+          ...lead,
+          utm_params: lead.utm_params ? JSON.stringify(lead.utm_params) : "",
+          locations: lead.locations && lead.locations[0] ? lead.locations[0].name : ""
+        }));
       console.log('leads', leads);
       let csvRow = objectToCsv(leads);
       downloadCsv(csvRow);
@@ -266,7 +266,7 @@ Array.from(document.querySelectorAll(".ajaxform")).map(form => {
         setTimeout(() => {
           $(".alert").alert("close");
         }, alertTimeout || 5000);
-        if(data.response.filepath){
+        if (data.response.filepath) {
           window.open(`${window.location.origin}/images/${data.response.filepath}`, '_blank')
         }
       })
@@ -328,4 +328,41 @@ if (jobcenterSelect) {
       }
     })
   })
+}
+const questionroot = document.getElementById("questionroot")
+const findAnswers = (question, model) => {
+  const answers = Object.values(model.layers.find(layer => layer.type === "diagram-nodes").models)
+    .filter(links => Object.values(model.layers.find(layer => layer.type === "diagram-links").models)
+      .filter(layer => layer.source === question.id).map(l => l.target).includes(links.id))
+
+  questionroot.innerHTML = `
+    <h2>${question.name}</h2>
+    ${answers.map(answer => {
+    return `<button class="btn btn-primary mr-2 answerbutton" data-question="${question.id}" data-answer="${answer.id}">${answer.name}</button>`
+  }).join('')}
+  `
+}
+
+if (questionroot) {
+  fetch(`/admin/questions/fetch`, {
+    headers: {
+      "content-type": "application/json"
+    },
+  }).then(res => res.json())
+    .then(res => {
+      // console.log('res', res);
+      const diagramNodes = res.payload.layers.find(layer => layer.type === "diagram-nodes").models
+      const links = res.payload.layers.find(layer => layer.type === "diagram-links").models
+      const startquestion = Object.values(diagramNodes).find(model => model.ports.find(port => port.label === "In").links.length === 0)
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains("answerbutton")) {
+          const currentAnswer = diagramNodes[e.target.dataset.answer]
+          var linkToNext = links[currentAnswer.ports.find(port => port.name === "Out").links[0]]
+          const nextQuestion = Object.values(diagramNodes).find(model => model.id === linkToNext[linkToNext.target === currentAnswer.id ? "source" : "target"])
+          findAnswers(nextQuestion, res.payload)
+          localStorage.setItem('answers', JSON.stringify({ ...JSON.parse(localStorage.getItem('answers')), [e.target.dataset.question]: e.target.innerText }))
+        }
+      })
+      findAnswers(startquestion, res.payload)
+    })
 }
