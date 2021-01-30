@@ -74,6 +74,17 @@ try {
   console.log(`Please set a mongo path in your .env \n\n${err}`)
 }
 
+app.use((req, res, next) => {
+  let ip = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+  console.log(`IP: `, ip)
+  req.abtesting = false
+  if ((ip.split(/[:|.]/).map(i => i.match(/\w/) ? parseInt(i, 16) : parseInt(i)).join('') % 20 === 0)) {
+    req.abtesting = true
+    // TODO deliver a different from for this 5% of users
+  }
+  next();
+});
+
 app.use(compression())
 
 i18n.configure({
