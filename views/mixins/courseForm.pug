@@ -101,6 +101,15 @@ mixin courseForm
     .mb-3
       label(for='startInterval') Course start interval
       input#startInterval.form-control(name='startInterval', type='text', placeholder='startInterval', value=course && course.startInterval ? course.startInterval :"")
+    .mb-3
+      label(for='computerKnowledge') computerKnowledge
+      input#computerKnowledge.form-control(name='computerKnowledge', type='text', placeholder='computerKnowledge', value=course && course.computerKnowledge ? course.computerKnowledge :"")
+    .mb-3
+      label(for='education') Education
+      input#education.form-control(name='education', type='text', placeholder='education', value=course && course.education ? course.education :"")
+    .mb-3
+      label(for='other') other
+      input#other.form-control(name='other', type='text', placeholder='other', value=course && course.other ? course.other :"")
 
     h3.mt-3 Archivements
     each archivementGroup, i in courseFormConfig.archivementConfig
