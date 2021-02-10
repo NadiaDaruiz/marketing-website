@@ -170,9 +170,18 @@ mixin singleCourse
                   = course.courseLanguages 
                   = " - "
                   =__("minimum B2 Level")
-            .my-3
-              strong.mr-2=__("Computer Knowledge")+":"
-              span.padded-text(style=course && course.coloraccent ? `background-color: ${course.coloraccent.replace(/rgb/, "rgba").replace(/\)/, ", 0.33)")}` : `` )=__("Beginner")
+            if course.computerKnowledge
+              .my-3
+                strong.mr-2=__("Computer Knowledge")+":"
+                span.padded-text(style=course && course.coloraccent ? `background-color: ${course.coloraccent.replace(/rgb/, "rgba").replace(/\)/, ", 0.33)")}` : `` )=course.computerKnowledge
+            if course.education
+              .my-3
+                strong.mr-2=__("Education")+":"
+                span.padded-text(style=course && course.coloraccent ? `background-color: ${course.coloraccent.replace(/rgb/, "rgba").replace(/\)/, ", 0.33)")}` : `` )=course.education
+            if course.other
+              .my-3
+                strong.mr-2=__("Other")+":"
+                span.padded-text(style=course && course.coloraccent ? `background-color: ${course.coloraccent.replace(/rgb/, "rgba").replace(/\)/, ", 0.33)")}` : `` )=course.other
       hr.d-md-none
 
       section.my-5.py-5

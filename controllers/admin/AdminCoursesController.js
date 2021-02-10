@@ -93,6 +93,9 @@ module.exports.createCourse = async function(req, res) {
   course.textColor = req.body.textColor;
   course.courseLanguages = req.body.courseLanguages;
   course.startInterval = req.body.startInterval;
+  course.computerKnowledge = req.body.computerKnowledge;
+  course.education = req.body.education;
+  course.other = req.body.other;
 
   if(!!req.body.successStory) {
     course.successStory = req.body.successStory;
@@ -260,6 +263,9 @@ module.exports.updateCourse = async function(req, res) {
   course.textColor = req.body.textColor;
   course.courseLanguages = req.body.courseLanguages;
   course.startInterval = req.body.startInterval;
+  course.computerKnowledge = req.body.computerKnowledge;
+  course.education = req.body.education;
+  course.other = req.body.other;
 
   function verbose(inputs) {
     let items = [];

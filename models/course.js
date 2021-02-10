@@ -79,6 +79,9 @@ var CourseSchema = new Schema({
   },
   courseLanguages: String,
   startInterval: String,
+  computerKnowledge: String,
+  education: String,
+  other: String,
 });
 CourseSchema.plugin(URLSlugs("headline"));
 CourseSchema.pre("remove", function (next) {
