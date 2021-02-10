@@ -82,6 +82,10 @@ var CourseSchema = new Schema({
   computerKnowledge: String,
   education: String,
   other: String,
+  financingoption: {
+    type: Boolean, 
+    default: true
+  },
 });
 CourseSchema.plugin(URLSlugs("headline"));
 CourseSchema.pre("remove", function (next) {

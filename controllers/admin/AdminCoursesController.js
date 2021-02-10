@@ -96,6 +96,7 @@ module.exports.createCourse = async function(req, res) {
   course.computerKnowledge = req.body.computerKnowledge;
   course.education = req.body.education;
   course.other = req.body.other;
+  course.financingoption = !!req.body.financingoption ? true : false;
 
   if(!!req.body.successStory) {
     course.successStory = req.body.successStory;
@@ -266,6 +267,7 @@ module.exports.updateCourse = async function(req, res) {
   course.computerKnowledge = req.body.computerKnowledge;
   course.education = req.body.education;
   course.other = req.body.other;
+  course.financingoption = !!req.body.financingoption ? true : false;
 
   function verbose(inputs) {
     let items = [];
